@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalpataru - AI Farming Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+  <style>
+    /* Minimal styling for image preview and uploads */
+    #image-preview img {
+      max-width: 200px;
+      display: block;
+      margin-bottom: 5px;
+    }
+    #image-preview span {
+      color: green;
+    }
+    #footer-btns button, .upload-btn {
+      margin-left: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+    
+  <!-- Sidebar (Library Section) -->
+  <aside id="library" style="display:none;">
+    <h2>📚 Library</h2>
+    <ul id="history"></ul>
+  </aside>
+
+  <!-- Main Chat Area -->
+  <div id="main">
+  <header>
+    <button onclick="toggleLibrary()">📚</button>
+    <h1>🌱 Kalpataru</h1>
+    <nav class="main-navbar">
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('weather') }}">Weather</a></li>
+        <li><a href="{{ url_for('leaf') }}">Leaf analyzer AI</a></li>
+        <li><a href="#">Chat</a></li>
+      </ul>
+    </nav>
+    <button class="menu-btn" id="menu-btn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="mobile-navbar" id="mobile-navbar">
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('weather') }}">Weather</a></li>
+        <li><a href="{{ url_for('leaf') }}">Leaf analyzer AI</a></li>
+        <li><a href="#">Chat</a></li>
+      </ul>
+    </nav>
+  </header>
+
+    <main id="chat-container">
+      <div id="chat-box"></div>
+      <!-- Image preview container -->
+      <div id="image-preview"></div>
+    </main>
+
+    <footer>
+      <input type="text" id="user-input" placeholder="Type your question...">
+      <button id="send-btn">Send</button>
+      <button id="voice-btn">🎤</button>
+
+      <!-- Upload buttons -->
+      <label for="image-upload" class="upload-btn">📷</label>
+      <input type="file" id="image-upload" accept="image/*" style="display:none;" onchange="sendImage()">
+
+      <label for="file-upload" class="upload-btn">📂</label>
+      <input type="file" id="file-upload" style="display:none;" onchange="sendFile()">
+
+      <!-- Global Stop Generating Button -->
+      <button id="stop-btn" style="background:red;color:white;padding:5px 10px;border:none;border-radius:5px;cursor:pointer;">⏹ Stop Generating</button>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    <script>
+    const menuBtn = document.getElementById('menu-btn');
+      const mobileNav = document.getElementById('mobile-navbar');
+
+      menuBtn.addEventListener('click', () => {
+        if (mobileNav.classList.contains('active')) {
+          // Start closing animation
+          mobileNav.classList.remove('active');
+          mobileNav.classList.add('closing');
+          // Wait for animation to finish, then remove .closing
+          mobileNav.addEventListener('animationend', function handler() {
+            mobileNav.classList.remove('closing');
+            mobileNav.removeEventListener('animationend', handler);
+          });
+        } else {
+          // Remove .closing if present before opening
+          mobileNav.classList.remove('closing');
+          // Force reflow to restart animation if needed
+          void mobileNav.offsetWidth;
+          mobileNav.classList.add('active');
+        }
+        menuBtn.classList.toggle('open');
+      });
+    </script>
+</body>
+</html>
